@@ -11,7 +11,8 @@ import (
 
 type (
 	IAuth interface {
-		Check(ctx context.Context) error
+		GetUid(ctx context.Context) int
+		VerifyToken(ctx context.Context, token string) (bool, error)
 	}
 )
 

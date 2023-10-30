@@ -3,7 +3,6 @@ package chat
 import (
 	"context"
 	"github.com/gogf/gf/v2/encoding/gjson"
-	"github.com/gogf/gf/v2/os/grpool"
 	"github.com/iimeta/iim-api/internal/errors"
 	"github.com/iimeta/iim-api/internal/model"
 	"github.com/iimeta/iim-api/internal/service"
@@ -45,21 +44,14 @@ func (s *sChat) Completions(ctx context.Context, params model.CompletionsReq) (o
 
 func (s *sChat) CompletionsStream(ctx context.Context, params model.CompletionsReq) (err error) {
 
-	response := make(chan openai.ChatCompletionStreamResponse)
-	defer close(response)
+	chat := sdk.NewChat()
+	chat.Corp = sdk.CORP_OPENAI
+	chat.Model = params.Model
+	chat.Messages = params.Messages
 
-	if err = grpool.AddWithRecover(ctx, func(ctx context.Context) {
-		chat := sdk.NewChat()
-		chat.Corp = sdk.CORP_OPENAI
-		chat.Model = params.Model
-		chat.Messages = params.Messages
-		chat.Stream = true
-		err = sdk.Chat.ChatStream(ctx, chat, response)
-		if err != nil {
-			logger.Error(ctx, err)
-			return
-		}
-	}, nil); err != nil {
+	response, err := sdk.Chat.ChatStream(ctx, chat)
+	defer close(response)
+	if err != nil {
 		logger.Error(ctx, err)
 		return err
 	}
@@ -70,12 +62,10 @@ func (s *sChat) CompletionsStream(ctx context.Context, params model.CompletionsR
 
 			if response.Choices[0].FinishReason == "stop" {
 
-				if response.Choices[0].Delta.Content != "" {
-					err = util.SSEServer(ctx, "", gjson.MustEncode(response))
-					if err != nil {
-						logger.Error(ctx, err)
-						return err
-					}
+				err = util.SSEServer(ctx, "", gjson.MustEncode(response))
+				if err != nil {
+					logger.Error(ctx, err)
+					return err
 				}
 
 				err = util.SSEServer(ctx, "", "[DONE]")

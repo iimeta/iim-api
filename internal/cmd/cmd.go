@@ -12,8 +12,6 @@ import (
 	"github.com/iimeta/iim-api/utility/logger"
 	"github.com/iimeta/iim-api/utility/middleware"
 	"net/http"
-
-	_ "github.com/iimeta/iim-server/server"
 )
 
 var (

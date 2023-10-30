@@ -1,25 +1,19 @@
 package middleware
 
 import (
-	"context"
-	"errors"
+	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
+	"github.com/gogf/gf/v2/text/gregex"
 	"github.com/gogf/gf/v2/text/gstr"
+	"github.com/gogf/gf/v2/util/gconv"
+	"github.com/iimeta/iim-api/internal/service"
 	"github.com/iimeta/iim-api/utility/logger"
+	"net/http"
 	"strings"
 )
 
-const JWTSessionConst = "__JWT_SESSION__"
 const UID_KEY = "uid"
-
-var (
-	ErrorNoLogin = errors.New("请登录后操作")
-)
-
-type IStorage interface {
-	// 判断是否是黑名单
-	IsBlackList(ctx context.Context, token string) bool
-}
+const SECRET_KEY = "sk"
 
 type JSession struct {
 	Uid       int    `json:"uid"`
@@ -29,7 +23,26 @@ type JSession struct {
 
 func Auth(r *ghttp.Request) {
 
-	//r.SetCtxVar(UID_KEY, uid)
+	token := AuthHeaderToken(r)
+
+	pass, err := service.Auth().VerifyToken(r.GetCtx(), token)
+	if err != nil || !pass {
+		r.Response.Header().Set("Content-Type", "application/json")
+		r.Response.WriteStatus(http.StatusUnauthorized, g.Map{"code": 401, "message": "Unauthorized"})
+		r.Exit()
+		return
+	}
+
+	r.SetCtxVar(SECRET_KEY, token)
+
+	uid, err := gregex.ReplaceString("[a-zA-Z]*", "", token)
+	if err != nil {
+		r.Response.WriteStatus(http.StatusInternalServerError, g.Map{"code": 500, "message": "解析 sk 失败"})
+		r.Exit()
+		return
+	}
+
+	r.SetCtxVar(UID_KEY, gconv.Int(uid))
 
 	if gstr.HasPrefix(r.GetHeader("Content-Type"), "application/json") {
 		logger.Debugf(r.GetCtx(), "url: %s, request body: %s", r.GetUrl(), r.GetBodyString())
