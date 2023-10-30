@@ -33,6 +33,7 @@ var (
 
 			s.Group("/v1", func(v1 *ghttp.RouterGroup) {
 
+				v1.Middleware(MiddlewareAuth)
 				v1.Middleware(MiddlewareHandlerResponse)
 
 				v1.Group("/chat", func(g *ghttp.RouterGroup) {

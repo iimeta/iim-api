@@ -6,14 +6,12 @@ import (
 	"github.com/gogf/gf/v2/text/gregex"
 	"github.com/gogf/gf/v2/text/gstr"
 	"github.com/gogf/gf/v2/util/gconv"
+	"github.com/iimeta/iim-api/internal/consts"
 	"github.com/iimeta/iim-api/internal/service"
 	"github.com/iimeta/iim-api/utility/logger"
 	"net/http"
 	"strings"
 )
-
-const UID_KEY = "uid"
-const SECRET_KEY = "sk"
 
 type JSession struct {
 	Uid       int    `json:"uid"`
@@ -33,16 +31,16 @@ func Auth(r *ghttp.Request) {
 		return
 	}
 
-	r.SetCtxVar(SECRET_KEY, token)
+	r.SetCtxVar(consts.SECRET_KEY, token)
 
-	uid, err := gregex.ReplaceString("[a-zA-Z]*", "", token)
+	uid, err := gregex.ReplaceString("[a-zA-Z-]*", "", token)
 	if err != nil {
 		r.Response.WriteStatus(http.StatusInternalServerError, g.Map{"code": 500, "message": "解析 sk 失败"})
 		r.Exit()
 		return
 	}
 
-	r.SetCtxVar(UID_KEY, gconv.Int(uid))
+	r.SetCtxVar(consts.UID_KEY, gconv.Int(uid))
 
 	if gstr.HasPrefix(r.GetHeader("Content-Type"), "application/json") {
 		logger.Debugf(r.GetCtx(), "url: %s, request body: %s", r.GetUrl(), r.GetBodyString())

@@ -149,6 +149,10 @@ func HGetStr(ctx context.Context, key, field string) (string, error) {
 	return reply.String(), nil
 }
 
+func HIncrBy(ctx context.Context, key, field string, increment int64) (int64, error) {
+	return master.HIncrBy(ctx, key, field, increment)
+}
+
 func SetEX(ctx context.Context, key string, value interface{}, ttlInSeconds int64) error {
 	return master.SetEX(ctx, key, value, ttlInSeconds)
 }
