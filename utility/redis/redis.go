@@ -149,6 +149,14 @@ func HGetStr(ctx context.Context, key, field string) (string, error) {
 	return reply.String(), nil
 }
 
+func HGetInt(ctx context.Context, key, field string) (int, error) {
+	reply, err := HGet(ctx, key, field)
+	if err != nil {
+		return 0, err
+	}
+	return reply.Int(), nil
+}
+
 func HIncrBy(ctx context.Context, key, field string, increment int64) (int64, error) {
 	return master.HIncrBy(ctx, key, field, increment)
 }

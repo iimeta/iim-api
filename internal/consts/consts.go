@@ -6,8 +6,10 @@ const (
 )
 
 const (
-	LOCK_SK_KEY        = "api:lock:sk:%s"
-	UID_SK_KEY         = "api:%d:%s"
+	LOCK_SK_KEY = "api:lock:sk:%s"
+
+	UID_USAGE_KEY      = "api:%d:usage:%s"
+	USAGE_COUNT_FIELD  = "usage_count"
 	USED_TOKENS_FIELD  = "used_tokens"
 	TOTAL_TOKENS_FIELD = "total_tokens"
 )

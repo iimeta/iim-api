@@ -7,5 +7,6 @@ package logic
 import (
 	_ "github.com/iimeta/iim-api/internal/logic/auth"
 	_ "github.com/iimeta/iim-api/internal/logic/chat"
+	_ "github.com/iimeta/iim-api/internal/logic/common"
 	_ "github.com/iimeta/iim-api/internal/logic/user"
 )

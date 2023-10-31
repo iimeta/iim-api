@@ -3,12 +3,10 @@ package chat
 import (
 	"context"
 	"github.com/gogf/gf/v2/encoding/gjson"
-	"github.com/iimeta/iim-api/internal/consts"
 	"github.com/iimeta/iim-api/internal/errors"
 	"github.com/iimeta/iim-api/internal/model"
 	"github.com/iimeta/iim-api/internal/service"
 	"github.com/iimeta/iim-api/utility/logger"
-	"github.com/iimeta/iim-api/utility/redis"
 	"github.com/iimeta/iim-api/utility/util"
 	"github.com/iimeta/iim-sdk/sdk"
 	"github.com/sashabaranov/go-openai"
@@ -29,8 +27,7 @@ func (s *sChat) Completions(ctx context.Context, params model.CompletionsReq) (r
 
 	defer func() {
 		if err == nil {
-			_, err = redis.HIncrBy(ctx, service.Auth().GetUidSkKey(ctx), consts.USED_TOKENS_FIELD, int64(response.Usage.TotalTokens))
-			if err != nil {
+			if err = service.Common().RecordUsage(ctx, response.Usage.TotalTokens); err != nil {
 				logger.Error(ctx, err)
 			}
 		}
@@ -59,8 +56,7 @@ func (s *sChat) CompletionsStream(ctx context.Context, params model.CompletionsR
 
 	defer func() {
 		if totalTokens != 0 {
-			_, err = redis.HIncrBy(ctx, service.Auth().GetUidSkKey(ctx), consts.USED_TOKENS_FIELD, int64(totalTokens))
-			if err != nil {
+			if err = service.Common().RecordUsage(ctx, totalTokens); err != nil {
 				logger.Error(ctx, err)
 			}
 		}

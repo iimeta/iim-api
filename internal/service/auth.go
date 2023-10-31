@@ -14,7 +14,7 @@ type (
 		GetUid(ctx context.Context) int
 		VerifyToken(ctx context.Context, token string) (bool, error)
 		GetToken(ctx context.Context) string
-		GetUidSkKey(ctx context.Context) string
+		CheckUsage(ctx context.Context) bool
 	}
 )
 

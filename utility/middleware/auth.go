@@ -23,6 +23,15 @@ func Auth(r *ghttp.Request) {
 
 	token := AuthHeaderToken(r)
 
+	uid, err := gregex.ReplaceString("[a-zA-Z-]*", "", token)
+	if err != nil {
+		r.Response.WriteStatus(http.StatusInternalServerError, g.Map{"code": 500, "message": "解析 sk 失败"})
+		r.Exit()
+		return
+	}
+
+	r.SetCtxVar(consts.UID_KEY, gconv.Int(uid))
+
 	pass, err := service.Auth().VerifyToken(r.GetCtx(), token)
 	if err != nil || !pass {
 		r.Response.Header().Set("Content-Type", "application/json")
@@ -32,15 +41,6 @@ func Auth(r *ghttp.Request) {
 	}
 
 	r.SetCtxVar(consts.SECRET_KEY, token)
-
-	uid, err := gregex.ReplaceString("[a-zA-Z-]*", "", token)
-	if err != nil {
-		r.Response.WriteStatus(http.StatusInternalServerError, g.Map{"code": 500, "message": "解析 sk 失败"})
-		r.Exit()
-		return
-	}
-
-	r.SetCtxVar(consts.UID_KEY, gconv.Int(uid))
 
 	if gstr.HasPrefix(r.GetHeader("Content-Type"), "application/json") {
 		logger.Debugf(r.GetCtx(), "url: %s, request body: %s", r.GetUrl(), r.GetBodyString())

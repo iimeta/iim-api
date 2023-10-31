@@ -2,7 +2,6 @@ package auth
 
 import (
 	"context"
-	"fmt"
 	"github.com/iimeta/iim-api/internal/consts"
 	"github.com/iimeta/iim-api/internal/errors"
 	"github.com/iimeta/iim-api/internal/service"
@@ -36,7 +35,7 @@ func (s *sAuth) VerifyToken(ctx context.Context, token string) (bool, error) {
 		return false, errors.New("token is nil")
 	}
 
-	return true, nil
+	return s.CheckUsage(ctx), nil
 }
 
 func (s *sAuth) GetToken(ctx context.Context) string {
@@ -50,6 +49,19 @@ func (s *sAuth) GetToken(ctx context.Context) string {
 	return sk.(string)
 }
 
-func (s *sAuth) GetUidSkKey(ctx context.Context) string {
-	return fmt.Sprintf(consts.UID_SK_KEY, service.Auth().GetUid(ctx), service.Auth().GetToken(ctx))
+func (s *sAuth) CheckUsage(ctx context.Context) bool {
+
+	usedTokens, err := service.Common().GetUsedTokens(ctx)
+	if err != nil {
+		logger.Error(ctx, err)
+		return false
+	}
+
+	totalTokens, err := service.Common().GetTotalTokens(ctx)
+	if err != nil {
+		logger.Error(ctx, err)
+		return false
+	}
+
+	return usedTokens < totalTokens
 }
