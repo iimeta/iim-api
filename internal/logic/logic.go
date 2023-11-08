@@ -9,4 +9,5 @@ import (
 	_ "github.com/iimeta/iim-api/internal/logic/chat"
 	_ "github.com/iimeta/iim-api/internal/logic/common"
 	_ "github.com/iimeta/iim-api/internal/logic/user"
+	_ "github.com/iimeta/iim-api/internal/logic/vip"
 )
