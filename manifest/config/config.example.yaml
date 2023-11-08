@@ -97,6 +97,18 @@ sdk:
         api_keys:
           - sk-111
           - sk-222
+      dall-e-2:
+        base_url: https://api.openai.com/v1
+#        proxy_url: http://localhost:7890
+        api_keys:
+          - sk-111
+          - sk-222
+      dall-e-3:
+        base_url: https://api.openai.com/v1
+#        proxy_url: http://localhost:7890
+        api_keys:
+          - sk-111
+          - sk-222
 
   baidu:  # 文心一言
     access_token:

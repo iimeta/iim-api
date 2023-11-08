@@ -7,9 +7,9 @@ require (
 	github.com/gogf/gf/contrib/nosql/redis/v2 v2.5.6
 	github.com/gogf/gf/v2 v2.5.6
 	github.com/gorilla/websocket v1.5.1
-	github.com/iimeta/iim-sdk v0.0.0-20231108060546-37e6636eca07
+	github.com/iimeta/iim-sdk v0.0.0-20231108142958-a8e78b04731b
 	github.com/redis/go-redis/v9 v9.3.0
-	github.com/sashabaranov/go-openai v1.17.2
+	github.com/sashabaranov/go-openai v1.17.3
 	github.com/tjfoc/gmsm v1.4.1
 	go.mongodb.org/mongo-driver v1.13.0
 )

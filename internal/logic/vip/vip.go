@@ -2,7 +2,11 @@ package vip
 
 import (
 	"context"
+	"github.com/iimeta/iim-api/internal/dao"
 	"github.com/iimeta/iim-api/internal/service"
+	"github.com/iimeta/iim-api/utility/logger"
+	"go.mongodb.org/mongo-driver/bson"
+	"slices"
 )
 
 type sVip struct{}
@@ -15,7 +19,29 @@ func New() service.IVip {
 	return &sVip{}
 }
 
-func (s *sVip) CheckUserVipModelPermission(ctx context.Context, userId int, model string) bool {
+func (s *sVip) CheckUserVipPermissions(ctx context.Context, secretKey, model string) bool {
 
-	return false
+	user, err := service.User().GetUserById(ctx, service.Auth().GetUid(ctx))
+	if err != nil {
+		logger.Error(ctx, err)
+		return false
+	}
+
+	if user.SecretKey != secretKey {
+		logger.Errorf(ctx, "invalid user secretKey: %s", secretKey)
+		return false
+	}
+
+	vip, err := dao.Vip.FindOne(ctx, bson.M{"level": user.VipLevel})
+	if err != nil {
+		logger.Error(ctx, err)
+		return false
+	}
+
+	if !slices.Contains(vip.Models, model) {
+		logger.Errorf(ctx, "no model: %s permissions", model)
+		return false
+	}
+
+	return true
 }

@@ -30,13 +30,16 @@ func (s *sUser) GetUserById(ctx context.Context, userId int) (*model.User, error
 	return &model.User{
 		Id:        user.Id,
 		UserId:    user.UserId,
-		Mobile:    user.Mobile,
 		Nickname:  user.Nickname,
 		Avatar:    user.Avatar,
 		Gender:    user.Gender,
-		Motto:     user.Motto,
+		Mobile:    user.Mobile,
 		Email:     user.Email,
 		Birthday:  user.Birthday,
+		Motto:     user.Motto,
+		VipLevel:  user.VipLevel,
+		SecretKey: user.SecretKey,
+		Status:    user.Status,
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
 	}, nil

@@ -2,6 +2,7 @@ package auth
 
 import (
 	"context"
+	"github.com/gogf/gf/v2/frame/g"
 	"github.com/iimeta/iim-api/internal/consts"
 	"github.com/iimeta/iim-api/internal/errors"
 	"github.com/iimeta/iim-api/internal/service"
@@ -35,7 +36,12 @@ func (s *sAuth) VerifyToken(ctx context.Context, token string) (bool, error) {
 		return false, errors.New("token is nil")
 	}
 
-	return s.CheckUsage(ctx), nil
+	if !s.CheckUsage(ctx) {
+		logger.Errorf(ctx, "token: %s usage exhausted", token)
+		return false, nil
+	}
+
+	return service.Vip().CheckUserVipPermissions(ctx, token, g.RequestFromCtx(ctx).GetForm("model").String()), nil
 }
 
 func (s *sAuth) GetToken(ctx context.Context) string {

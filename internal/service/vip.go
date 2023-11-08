@@ -11,7 +11,7 @@ import (
 
 type (
 	IVip interface {
-		CheckUserVipModelPermission(ctx context.Context, userId int, model string) bool
+		CheckUserVipPermissions(ctx context.Context, secretKey, model string) bool
 	}
 )
 
