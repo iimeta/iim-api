@@ -2,6 +2,7 @@ package vip
 
 import (
 	"context"
+	"github.com/gogf/gf/v2/text/gstr"
 	"github.com/iimeta/iim-api/internal/dao"
 	"github.com/iimeta/iim-api/internal/service"
 	"github.com/iimeta/iim-api/utility/logger"
@@ -38,9 +39,20 @@ func (s *sVip) CheckUserVipPermissions(ctx context.Context, secretKey, model str
 		return false
 	}
 
-	if !slices.Contains(vip.Models, model) {
-		logger.Errorf(ctx, "no model: %s permissions", model)
-		return false
+	isContains := slices.Contains(vip.Models, model)
+	if !isContains {
+
+		for _, m := range vip.Models {
+			if gstr.HasPrefix(m, model) {
+				isContains = true
+				break
+			}
+		}
+
+		if !isContains {
+			logger.Errorf(ctx, "no model: %s permissions", model)
+			return false
+		}
 	}
 
 	return true
