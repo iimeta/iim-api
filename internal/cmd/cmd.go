@@ -9,6 +9,7 @@ import (
 	"github.com/gogf/gf/v2/net/ghttp"
 	"github.com/gogf/gf/v2/os/gcmd"
 	"github.com/iimeta/iim-api/internal/controller/chat"
+	"github.com/iimeta/iim-api/internal/controller/token"
 	"github.com/iimeta/iim-api/utility/logger"
 	"github.com/iimeta/iim-api/utility/middleware"
 	"net/http"
@@ -39,6 +40,12 @@ var (
 				v1.Group("/chat", func(g *ghttp.RouterGroup) {
 					g.Bind(
 						chat.NewV1(),
+					)
+				})
+
+				v1.Group("/token", func(g *ghttp.RouterGroup) {
+					g.Bind(
+						token.NewV1(),
 					)
 				})
 			})

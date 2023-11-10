@@ -11,8 +11,10 @@ import (
 
 type (
 	ICommon interface {
+		VerifyToken(ctx context.Context, secretKey string) bool
 		GetUidUsageKey(ctx context.Context) string
 		RecordUsage(ctx context.Context, totalTokens int) error
+		GetUsageCount(ctx context.Context) (int, error)
 		GetUsedTokens(ctx context.Context) (int, error)
 		GetTotalTokens(ctx context.Context) (int, error)
 	}

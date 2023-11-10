@@ -20,6 +20,22 @@ func New() service.ICommon {
 	return &sCommon{}
 }
 
+func (s *sCommon) VerifyToken(ctx context.Context, secretKey string) bool {
+
+	user, err := service.User().GetUserById(ctx, service.Auth().GetUid(ctx))
+	if err != nil {
+		logger.Error(ctx, err)
+		return false
+	}
+
+	if user.SecretKey != secretKey {
+		logger.Errorf(ctx, "invalid user secretKey: %s", secretKey)
+		return false
+	}
+
+	return true
+}
+
 func (s *sCommon) GetUidUsageKey(ctx context.Context) string {
 	return fmt.Sprintf(consts.UID_USAGE_KEY, service.Auth().GetUid(ctx), time.Now().Format("20060102"))
 }
@@ -39,8 +55,12 @@ func (s *sCommon) RecordUsage(ctx context.Context, totalTokens int) error {
 	return nil
 }
 
-func (s *sCommon) GetUsedTokens(ctx context.Context) (int, error) {
+func (s *sCommon) GetUsageCount(ctx context.Context) (int, error) {
 	return redis.HGetInt(ctx, s.GetUidUsageKey(ctx), consts.USAGE_COUNT_FIELD)
+}
+
+func (s *sCommon) GetUsedTokens(ctx context.Context) (int, error) {
+	return redis.HGetInt(ctx, s.GetUidUsageKey(ctx), consts.USED_TOKENS_FIELD)
 }
 
 func (s *sCommon) GetTotalTokens(ctx context.Context) (int, error) {

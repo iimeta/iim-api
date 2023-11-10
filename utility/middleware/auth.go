@@ -32,12 +32,21 @@ func Auth(r *ghttp.Request) {
 
 	r.SetCtxVar(consts.UID_KEY, gconv.Int(uid))
 
-	pass, err := service.Auth().VerifyToken(r.GetCtx(), token)
-	if err != nil || !pass {
-		r.Response.Header().Set("Content-Type", "application/json")
-		r.Response.WriteStatus(http.StatusUnauthorized, g.Map{"code": 401, "message": "Unauthorized"})
-		r.Exit()
-		return
+	if gstr.HasPrefix(r.URL.Path, "/v1/token/usage") {
+		if !service.Common().VerifyToken(r.GetCtx(), token) {
+			r.Response.Header().Set("Content-Type", "application/json")
+			r.Response.WriteStatus(http.StatusUnauthorized, g.Map{"code": 401, "message": "Unauthorized"})
+			r.Exit()
+			return
+		}
+	} else {
+		pass, err := service.Auth().VerifyToken(r.GetCtx(), token)
+		if err != nil || !pass {
+			r.Response.Header().Set("Content-Type", "application/json")
+			r.Response.WriteStatus(http.StatusUnauthorized, g.Map{"code": 401, "message": "Unauthorized"})
+			r.Exit()
+			return
+		}
 	}
 
 	r.SetCtxVar(consts.SECRET_KEY, token)

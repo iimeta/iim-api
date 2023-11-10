@@ -9,7 +9,7 @@ require (
 	github.com/gorilla/websocket v1.5.1
 	github.com/iimeta/iim-sdk v0.0.0-20231109043224-bde9afa13334
 	github.com/redis/go-redis/v9 v9.3.0
-	github.com/sashabaranov/go-openai v1.17.3
+	github.com/sashabaranov/go-openai v1.17.5
 	github.com/tjfoc/gmsm v1.4.1
 	go.mongodb.org/mongo-driver v1.13.0
 )
