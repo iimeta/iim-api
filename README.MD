@@ -10,7 +10,7 @@
 
 </div>
 
-`智元 IIM` 是一个网页版即时聊天系统, 同时拥有AI聊天对话功能, 本项目基于[Lumen IM](https://github.com/gzydong/go-chat)使用[GoFrame](https://github.com/gogf/gf)框架开发
+`智元 IIM` 是一款开源的网页版即时聊天系统, 同时拥有AI聊天对话功能, 本项目基于[Lumen IM](https://github.com/gzydong/go-chat)使用[GoFrame](https://github.com/gogf/gf)框架开发
 
 ## 手动Docker部署
 0. 需提前安装好Redis和MongoDB以及Docker服务
