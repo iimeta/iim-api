@@ -14,10 +14,7 @@ output/
 manifest/output/
 temp/
 temp.yaml
-bin/iim*
-bin/api*
 log/
 logs/
-bin/*.zip
 bin/
 **/config/config.yaml

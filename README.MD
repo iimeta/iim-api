@@ -1,6 +1,6 @@
 <div align=center>
 
-<img src="https://iim.ai/public/images/logo.png?t=2023112623" width="128"/>
+<img src="https://iim.ai/public/images/logo.png?t=20231207" width="128"/>
 
 # 智元 IIM API
 
@@ -66,10 +66,10 @@ curl --location 'https://api.iim.ai/v1/token/usage' \
 | 码云 | https://gitee.com/iimeta/iim-web  | https://gitee.com/iimeta/iim-client  | https://gitee.com/iimeta/iim-api  |
 
 ## 作者
-<img src="https://iim.ai/public/images/Author.png?t=20231126" width="320" alt="作者"/>
+<img src="https://iim.ai/public/images/Author.png?t=20231207" width="320" alt="作者"/>
 
 ## 交流群
-<img src="https://iim.ai/public/images/WeChatGroup.jpg?t=20231126" width="320" alt="交流群"/>
+<img src="https://iim.ai/public/images/WeChatGroup.jpg?t=20231207" width="320" alt="交流群"/>
 
 
 ![Star History Chart](https://api.star-history.com/svg?repos=iimeta/iim-api&type=Date)
